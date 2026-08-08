@@ -1,0 +1,84 @@
+{
+  "name": "@aburex12345/stellar-wallet-testkit",
+  "version": "0.1.0",
+  "description": "Deterministic Freighter-compatible wallet testing infrastructure for Stellar dApps",
+  "keywords": [
+    "stellar",
+    "soroban",
+    "wallet",
+    "freighter",
+    "testing",
+    "playwright",
+    "vitest"
+  ],
+  "license": "MIT",
+  "author": "aburex12345",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aburex12345/stellar-wallet-testkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aburex12345/stellar-wallet-testkit/issues"
+  },
+  "homepage": "https://github.com/aburex12345/stellar-wallet-testkit#readme",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./playwright": {
+      "types": "./dist/playwright.d.ts",
+      "import": "./dist/playwright.js"
+    },
+    "./mock": {
+      "types": "./dist/mock.d.ts",
+      "import": "./dist/mock.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "stellar-wallet-testkit": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist coverage",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "issues:render": "node scripts/render-wave-issues.mjs",
+    "issues:check": "node scripts/render-wave-issues.mjs && git diff --exit-code -- docs/WAVE_ISSUES.md",
+    "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run build",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^14.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@types/node": "^24.2.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.0",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose a focused improvement
+title: "[Feature]: "
+labels: ["type: enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Testing problem
+      description: Describe the concrete Stellar dApp testing gap.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API or behavior
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: dropdown
+    id: compatibility
+    attributes:
+      label: Does this model an existing wallet API?
+      options: ["No", "Yes — Freighter", "Yes — another Stellar wallet", "Unknown"]
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety
+      options:
+        - label: This proposal does not require real private keys or user data.
+          required: true

@@ -1,0 +1,682 @@
+[
+  {
+    "title": "Add named reusable behavior sequence builders",
+    "group": "Core state machine",
+    "difficulty": "beginner",
+    "type": "enhancement",
+    "context": "The controller supports FIFO scripts, but repeated multi-step sequences are verbose.",
+    "tasks": [
+      "Design a composeBehaviors helper",
+      "Preserve one-shot ordering",
+      "Document composition examples"
+    ],
+    "acceptance": [
+      "Sequences cannot share mutable queues",
+      "Existing behavior objects remain supported",
+      "Public types are exported"
+    ],
+    "files": ["src/controller.ts", "src/types.ts", "docs/SCENARIOS.md"],
+    "tests": ["Unit tests for composition, reuse, and ordering"]
+  },
+  {
+    "title": "Add operation call records with sanitized arguments",
+    "group": "Core state machine",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "History records operation names but cannot support assertions about supplied signing options.",
+    "tasks": [
+      "Define typed call-record unions",
+      "Record sanitized options without full XDR",
+      "Add history filtering helpers"
+    ],
+    "acceptance": [
+      "Raw transaction and message payloads are excluded by default",
+      "Records are immutable snapshots",
+      "Current history API remains compatible"
+    ],
+    "files": ["src/controller.ts", "src/types.ts"],
+    "tests": ["Argument redaction, ordering, filtering, and immutability tests"]
+  },
+  {
+    "title": "Support abort signals for scripted delays",
+    "group": "Core state machine",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "Pending timeout scenarios can retain promises longer than a test needs.",
+    "tasks": [
+      "Accept an optional AbortSignal in controller execution",
+      "Cancel delays and timeout scripts",
+      "Define a stable cancellation error"
+    ],
+    "acceptance": [
+      "Already-aborted and later-aborted signals behave consistently",
+      "Timers are cleaned up",
+      "Default API behavior is unchanged"
+    ],
+    "files": ["src/controller.ts", "src/types.ts"],
+    "tests": ["Fake-timer tests for delay and never-settling behavior cancellation"]
+  },
+  {
+    "title": "Validate wallet state transition invariants",
+    "group": "Core state machine",
+    "difficulty": "beginner",
+    "type": "quality",
+    "context": "Direct state patches can currently represent allowed while disconnected, which may be useful but surprising.",
+    "tasks": [
+      "Document strict and permissive modes",
+      "Implement opt-in strict validation",
+      "Return actionable invariant errors"
+    ],
+    "acceptance": [
+      "Permissive mode remains default",
+      "Strict mode rejects three invalid prerequisite combinations",
+      "Scripted patches use the same validator"
+    ],
+    "files": ["src/controller.ts", "src/types.ts", "docs/ARCHITECTURE.md"],
+    "tests": ["Table-driven strict and permissive transition tests"]
+  },
+  {
+    "title": "Add controller reset and snapshot restore APIs",
+    "group": "Core state machine",
+    "difficulty": "beginner",
+    "type": "enhancement",
+    "context": "Test suites need a concise way to restore baseline state between cases.",
+    "tasks": [
+      "Define serializable snapshots",
+      "Implement reset and restore",
+      "Clarify whether scripts and history are included"
+    ],
+    "acceptance": [
+      "Snapshots do not expose mutable internals",
+      "Reset semantics are documented",
+      "Restore emits one coherent event"
+    ],
+    "files": ["src/controller.ts", "src/types.ts", "docs/SCENARIOS.md"],
+    "tests": ["State, queue, history, and subscription restore tests"]
+  },
+  {
+    "title": "Add deterministic virtual clock integration",
+    "group": "Core state machine",
+    "difficulty": "advanced",
+    "type": "enhancement",
+    "context": "Delay scripts use global timers and require runner-specific fake timers for instant tests.",
+    "tasks": [
+      "Define a minimal Clock interface",
+      "Inject a default real clock",
+      "Provide a manually advanced test clock"
+    ],
+    "acceptance": [
+      "No runner dependency is introduced",
+      "Concurrent delays settle in deterministic order",
+      "Browser serialization has a documented strategy"
+    ],
+    "files": ["src/controller.ts", "src/types.ts", "src/playwright.ts"],
+    "tests": ["Concurrent scheduling, cancellation, and real-clock compatibility tests"]
+  },
+  {
+    "title": "Create a Freighter compatibility contract matrix",
+    "group": "Freighter compatibility",
+    "difficulty": "intermediate",
+    "type": "compatibility",
+    "context": "The adapter targets current object-result APIs but supported package versions are not machine-verified.",
+    "tasks": [
+      "Select representative Freighter API releases",
+      "Capture public TypeScript shapes",
+      "Run compile-only contract fixtures in CI"
+    ],
+    "acceptance": [
+      "Matrix names exact supported versions",
+      "No extension installation is required",
+      "Breaking upstream drift fails clearly"
+    ],
+    "files": ["tests/compatibility", "docs/ARCHITECTURE.md", ".github/workflows/ci.yml"],
+    "tests": ["Compile fixtures against every declared supported version"]
+  },
+  {
+    "title": "Model requestAccess approval as a state transition",
+    "group": "Freighter compatibility",
+    "difficulty": "intermediate",
+    "type": "compatibility",
+    "context": "requestAccess currently reports denied state unless a script explicitly changes it.",
+    "tasks": [
+      "Verify released Freighter behavior",
+      "Add an opt-in auto-approve policy",
+      "Keep explicit rejection scripts authoritative"
+    ],
+    "acceptance": [
+      "Policy defaults are documented",
+      "Approval updates allowed state before returning",
+      "Browser and module adapters match"
+    ],
+    "files": ["src/adapter.ts", "src/playwright.ts", "docs/SCENARIOS.md"],
+    "tests": ["Approval, rejection, disconnected, and scripted override tests"]
+  },
+  {
+    "title": "Add getUserInfo compatibility support",
+    "group": "Freighter compatibility",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "Recent Freighter integrations may use account metadata beyond getAddress.",
+    "tasks": [
+      "Confirm the current result schema",
+      "Add typed controller state",
+      "Implement browser and module adapter methods"
+    ],
+    "acceptance": [
+      "Types match a documented upstream release",
+      "Missing fields are not invented",
+      "Private account data is never accepted"
+    ],
+    "files": ["src/types.ts", "src/adapter.ts", "src/playwright.ts"],
+    "tests": ["Compatibility fixtures and state-change tests"]
+  },
+  {
+    "title": "Add addToken result modeling",
+    "group": "Freighter compatibility",
+    "difficulty": "beginner",
+    "type": "enhancement",
+    "context": "Token onboarding flows need deterministic acceptance and rejection coverage.",
+    "tasks": [
+      "Verify addToken options and result shape",
+      "Add a scripted operation",
+      "Document that no token is persisted outside controller state"
+    ],
+    "acceptance": [
+      "Success, duplicate, malformed, and rejection results are typed",
+      "No network lookup occurs",
+      "Browser parity is maintained"
+    ],
+    "files": ["src/types.ts", "src/adapter.ts", "src/playwright.ts"],
+    "tests": ["Object-result shape and scripted error tests"]
+  },
+  {
+    "title": "Validate signing option precedence against Freighter",
+    "group": "Freighter compatibility",
+    "difficulty": "advanced",
+    "type": "compatibility",
+    "context": "Freighter gives network names precedence over custom passphrases; edge behavior needs contract tests.",
+    "tasks": [
+      "Build an upstream-observation fixture",
+      "Encode network precedence rules",
+      "Document conflicting option behavior"
+    ],
+    "acceptance": [
+      "Named and custom network cases match upstream",
+      "Unknown network names return realistic errors",
+      "All signing methods share validation"
+    ],
+    "files": ["src/adapter.ts", "src/playwright.ts", "tests/compatibility"],
+    "tests": ["Table-driven option precedence matrix"]
+  },
+  {
+    "title": "Normalize all Freighter API error codes",
+    "group": "Freighter compatibility",
+    "difficulty": "intermediate",
+    "type": "quality",
+    "context": "Error codes are currently useful testkit identifiers but need a verified relationship to upstream errors.",
+    "tasks": [
+      "Inventory upstream errors",
+      "Create a typed error-code catalog",
+      "Mark testkit-only codes explicitly"
+    ],
+    "acceptance": [
+      "Every adapter error uses the catalog",
+      "Messages remain human-readable",
+      "Migration notes cover renamed codes"
+    ],
+    "files": ["src/adapter.ts", "src/types.ts", "docs/SCENARIOS.md"],
+    "tests": ["Exhaustive error-code snapshots for public methods"]
+  },
+  {
+    "title": "Add fee-bump envelope construction tests",
+    "group": "XDR assertions",
+    "difficulty": "intermediate",
+    "type": "testing",
+    "context": "decodeEnvelope supports fee-bump transactions but the baseline suite only covers ordinary envelopes.",
+    "tasks": [
+      "Build public-key-only fee-bump fixtures",
+      "Assert inner source and operation behavior",
+      "Cover malformed fee-bump envelopes"
+    ],
+    "acceptance": [
+      "No secret keys are used",
+      "feeBump is true for valid fixtures",
+      "Inner transaction assertions work unchanged"
+    ],
+    "files": ["tests/xdr.test.ts"],
+    "tests": ["Valid, malformed, and wrong-envelope-type fee-bump cases"]
+  },
+  {
+    "title": "Add Soroban auth entry decoder",
+    "group": "XDR assertions",
+    "difficulty": "advanced",
+    "type": "enhancement",
+    "context": "signAuthEntry can be mocked, but tests cannot inspect authorization entry details.",
+    "tasks": [
+      "Decode supported auth-entry XDR variants",
+      "Return typed credentials and invocation data",
+      "Normalize malformed input errors"
+    ],
+    "acceptance": [
+      "Address and source-account credential variants are covered",
+      "CAP-71 handling is version documented",
+      "No signing is performed"
+    ],
+    "files": ["src/auth-xdr.ts", "src/index.ts", "docs/ARCHITECTURE.md"],
+    "tests": ["SDK-generated fixtures for each credential variant and malformed XDR"]
+  },
+  {
+    "title": "Assert Soroban contract function names and arguments",
+    "group": "XDR assertions",
+    "difficulty": "advanced",
+    "type": "enhancement",
+    "context": "assertInvokeContract checks only the target contract.",
+    "tasks": [
+      "Expose typed function-name extraction",
+      "Add ScVal argument matchers",
+      "Provide readable mismatch formatting"
+    ],
+    "acceptance": [
+      "Symbols, addresses, integers, and vectors are supported",
+      "Large values are safely abbreviated",
+      "Contract target assertions remain compatible"
+    ],
+    "files": ["src/xdr.ts", "src/index.ts"],
+    "tests": ["Function and nested argument success and mismatch tests"]
+  },
+  {
+    "title": "Add operation sequence assertions",
+    "group": "XDR assertions",
+    "difficulty": "beginner",
+    "type": "enhancement",
+    "context": "Consumers often need to verify ordered operation types before checking details.",
+    "tasks": [
+      "Add assertOperationTypes",
+      "Return narrowed operations where practical",
+      "Write concise mismatch messages"
+    ],
+    "acceptance": [
+      "Order and exact length are checked",
+      "Unknown operation types remain representable",
+      "Fee-bump inner operations work"
+    ],
+    "files": ["src/xdr.ts", "src/index.ts"],
+    "tests": ["Empty, matching, reordered, and extra-operation cases"]
+  },
+  {
+    "title": "Add memo and time-bounds assertions",
+    "group": "XDR assertions",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "Payment safety tests frequently depend on memo and transaction validity bounds.",
+    "tasks": [
+      "Add typed memo assertions",
+      "Support time and ledger bounds",
+      "Explain absent versus unbounded values"
+    ],
+    "acceptance": [
+      "Text, id, hash, and return memo variants are covered",
+      "Big integer values are compared safely",
+      "Mismatch errors identify the field"
+    ],
+    "files": ["src/xdr.ts", "src/index.ts"],
+    "tests": ["Every memo variant plus bounded and unbounded transactions"]
+  },
+  {
+    "title": "Add fuzz tests for malformed transaction XDR",
+    "group": "XDR assertions",
+    "difficulty": "advanced",
+    "type": "security",
+    "context": "A small malformed corpus cannot reveal all parser wrapper failure modes.",
+    "tasks": [
+      "Add deterministic mutation-based fuzzing",
+      "Bound input sizes and runtime",
+      "Save minimal regression seeds"
+    ],
+    "acceptance": [
+      "The suite is deterministic in CI",
+      "All failures become InvalidTransactionXdrError",
+      "No test exceeds documented resource bounds"
+    ],
+    "files": ["tests/xdr-fuzz.test.ts", "vitest.config.ts", "docs/SECURITY_MODEL.md"],
+    "tests": ["Truncation, bit-flip, invalid discriminator, and oversized input mutations"]
+  },
+  {
+    "title": "Run browser injection tests in Chromium",
+    "group": "Browser integrations",
+    "difficulty": "intermediate",
+    "type": "testing",
+    "context": "The baseline tests execute the init function structurally rather than in a browser realm.",
+    "tasks": [
+      "Add a minimal static page",
+      "Install Playwright as an optional dev tool",
+      "Exercise injection before navigation"
+    ],
+    "acceptance": [
+      "Tests run headlessly in CI",
+      "No extension is installed",
+      "Runtime state changes and scripts are covered"
+    ],
+    "files": ["tests/browser", "playwright.config.ts", ".github/workflows/ci.yml"],
+    "tests": ["Address, network, rejection, account change, and history browser tests"]
+  },
+  {
+    "title": "Add browser parity tests for long message payloads",
+    "group": "Browser integrations",
+    "difficulty": "beginner",
+    "type": "testing",
+    "context": "Unicode message handling is covered, but large payload behavior and Node/browser parity are not bounded.",
+    "tasks": [
+      "Define representative payload size cases",
+      "Compare Node and browser fake output bytes",
+      "Document a practical test payload limit"
+    ],
+    "acceptance": [
+      "Empty, Unicode, 64 KiB, and bounded failure cases are covered",
+      "Node and browser outputs match",
+      "Tests do not allocate unbounded strings"
+    ],
+    "files": ["src/adapter.ts", "src/playwright.ts"],
+    "tests": ["Empty, Unicode, long-message, and Node/browser parity cases"]
+  },
+  {
+    "title": "Add Cypress window injection adapter",
+    "group": "Browser integrations",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "The serialized browser mock can support Cypress without adding it as a runtime dependency.",
+    "tasks": [
+      "Define a structural Cypress hook interface",
+      "Reuse a shared browser installer payload",
+      "Document before-load usage"
+    ],
+    "acceptance": [
+      "Cypress is optional",
+      "Behavior matches Playwright injection",
+      "No browser implementation is duplicated"
+    ],
+    "files": ["src/browser.ts", "src/cypress.ts", "docs/ARCHITECTURE.md"],
+    "tests": ["Structural adapter tests and one optional Cypress smoke example"]
+  },
+  {
+    "title": "Add WebdriverIO browser injection adapter",
+    "group": "Browser integrations",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "WebdriverIO users need a preload-script path using the same wallet semantics.",
+    "tasks": [
+      "Research preload support",
+      "Define structural browser interfaces",
+      "Document lifecycle limitations"
+    ],
+    "acceptance": [
+      "No WebdriverIO runtime dependency is added",
+      "New documents receive the mock",
+      "Unsupported drivers fail clearly"
+    ],
+    "files": ["src/webdriverio.ts", "src/browser.ts", "README.md"],
+    "tests": ["Structural tests plus supported/unsupported capability cases"]
+  },
+  {
+    "title": "Share adapter semantics between Node and browser",
+    "group": "Browser integrations",
+    "difficulty": "advanced",
+    "type": "refactor",
+    "context": "Serialization constraints currently cause similar result logic in two implementations.",
+    "tasks": [
+      "Extract a serializable protocol model",
+      "Generate or share result semantics",
+      "Preserve tree-shaking and browser safety"
+    ],
+    "acceptance": [
+      "Compatibility behavior has one source of truth",
+      "Injected code has no Node globals",
+      "Bundle size regression is measured"
+    ],
+    "files": ["src/adapter.ts", "src/playwright.ts", "src/browser.ts"],
+    "tests": ["Node/browser contract suite runs identical vectors"]
+  },
+  {
+    "title": "Add content security policy integration guidance",
+    "group": "Browser integrations",
+    "difficulty": "beginner",
+    "type": "documentation",
+    "context": "Strict test deployments may restrict inline or evaluated initialization scripts.",
+    "tasks": [
+      "Document how addInitScript interacts with CSP",
+      "Add known browser caveats",
+      "Provide a safe troubleshooting checklist"
+    ],
+    "acceptance": [
+      "Guidance distinguishes page CSP from test-runner injection",
+      "No production CSP weakening is recommended",
+      "Examples cover common failures"
+    ],
+    "files": ["README.md", "docs/SECURITY_MODEL.md"],
+    "tests": ["Documentation links checked in CI"]
+  },
+  {
+    "title": "Raise branch coverage for browser controls",
+    "group": "Quality and developer experience",
+    "difficulty": "beginner",
+    "type": "testing",
+    "context": "Browser control queue clearing and scripted error branches need direct coverage.",
+    "tasks": [
+      "Identify uncovered browser branches",
+      "Add behavior-focused tests",
+      "Raise the branch threshold without exclusions"
+    ],
+    "acceptance": [
+      "Project branch coverage reaches 85 percent",
+      "Tests do not assert implementation-only details",
+      "No ignore comments are added"
+    ],
+    "files": ["tests/playwright.test.ts", "vitest.config.ts"],
+    "tests": ["Scripted string/object errors, clearScripts, mismatch, and delay cases"]
+  },
+  {
+    "title": "Add API Extractor compatibility reports",
+    "group": "Quality and developer experience",
+    "difficulty": "intermediate",
+    "type": "quality",
+    "context": "Pre-1.0 API evolution still benefits from reviewable declaration snapshots.",
+    "tasks": ["Configure API Extractor", "Commit a canonical report", "Run drift checks in CI"],
+    "acceptance": [
+      "All public exports are represented",
+      "Intentional changes have a documented update command",
+      "Internal types stay hidden"
+    ],
+    "files": ["api-extractor.json", "etc", "package.json", ".github/workflows/ci.yml"],
+    "tests": ["Build and API report checks"]
+  },
+  {
+    "title": "Add package consumer smoke projects",
+    "group": "Quality and developer experience",
+    "difficulty": "intermediate",
+    "type": "testing",
+    "context": "Source tests do not prove the packed export map works for real consumers.",
+    "tasks": [
+      "Pack the package in CI",
+      "Install into ESM TypeScript fixtures",
+      "Import root, mock, and Playwright entry points"
+    ],
+    "acceptance": [
+      "Fixtures install from the generated tarball",
+      "Types and runtime imports both execute",
+      "Only published files are used"
+    ],
+    "files": ["tests/consumers", "scripts/test-package.mjs", ".github/workflows/ci.yml"],
+    "tests": ["Node 20 and 22 packed-package smoke tests"]
+  },
+  {
+    "title": "Improve CLI decode input handling",
+    "group": "Quality and developer experience",
+    "difficulty": "beginner",
+    "type": "enhancement",
+    "context": "Long XDR values are inconvenient and potentially visible in shell history.",
+    "tasks": [
+      "Accept stdin and file input",
+      "Make input modes mutually exclusive",
+      "Document exit codes"
+    ],
+    "acceptance": [
+      "stdin, file, and argument modes work",
+      "No input content is printed on errors",
+      "Malformed files exit with code 2"
+    ],
+    "files": ["src/cli.ts", "README.md"],
+    "tests": ["CLI subprocess tests for all input modes and exit codes"]
+  },
+  {
+    "title": "Add documentation link and example checks",
+    "group": "Quality and developer experience",
+    "difficulty": "beginner",
+    "type": "documentation",
+    "context": "A contributor-focused repository needs confidence that links and code snippets stay current.",
+    "tasks": [
+      "Select lightweight offline tooling",
+      "Check local Markdown links",
+      "Compile extracted or dedicated examples"
+    ],
+    "acceptance": [
+      "CI fails on broken local links",
+      "Examples use public exports",
+      "External links do not make CI flaky"
+    ],
+    "files": ["package.json", ".github/workflows/ci.yml", "examples"],
+    "tests": ["Documentation check command runs locally and in CI"]
+  },
+  {
+    "title": "Add npm provenance release workflow",
+    "group": "Quality and developer experience",
+    "difficulty": "advanced",
+    "type": "release",
+    "context": "Release guidance calls for provenance but no publishing workflow is implemented.",
+    "tasks": [
+      "Create a tag-triggered trusted-publishing workflow",
+      "Gate publish on full validation",
+      "Attach package metadata to the release"
+    ],
+    "acceptance": [
+      "Workflow uses OIDC and no long-lived npm token",
+      "Dry runs are possible",
+      "Environment approval is documented"
+    ],
+    "files": [".github/workflows/release.yml", "CHANGELOG.md", "SECURITY.md"],
+    "tests": ["Workflow syntax validation and npm pack inspection"]
+  },
+  {
+    "title": "Build a minimal React wallet hook example",
+    "group": "Ecosystem adoption",
+    "difficulty": "beginner",
+    "type": "example",
+    "context": "Many Stellar dApps wrap Freighter in a hook and need a realistic testing pattern.",
+    "tasks": [
+      "Create a tiny framework-isolated example",
+      "Show rejection and account refresh tests",
+      "Avoid shipping React in the package"
+    ],
+    "acceptance": [
+      "Example is under 200 source lines",
+      "Dependencies are example-only",
+      "Tests demonstrate public APIs"
+    ],
+    "files": ["examples/react-wallet-hook", "README.md"],
+    "tests": ["Hook success, rejection, and account-change tests"]
+  },
+  {
+    "title": "Publish a wallet adapter interoperability guide",
+    "group": "Ecosystem adoption",
+    "difficulty": "intermediate",
+    "type": "documentation",
+    "context": "DApps may support multiple Stellar wallets behind their own adapter.",
+    "tasks": [
+      "Define the boundary between this mock and app adapters",
+      "Show dependency injection patterns",
+      "Document unsupported wallet-specific methods"
+    ],
+    "acceptance": [
+      "Guide avoids claiming universal wallet compatibility",
+      "Two adapter patterns are shown",
+      "Freighter-specific behavior is labeled"
+    ],
+    "files": ["docs/INTEROPERABILITY.md", "README.md"],
+    "tests": ["Example adapters typecheck"]
+  },
+  {
+    "title": "Add JSON schema for scenario definitions",
+    "group": "Ecosystem adoption",
+    "difficulty": "intermediate",
+    "type": "enhancement",
+    "context": "Serializable scenarios could be shared across language and browser harnesses.",
+    "tasks": [
+      "Define a versioned JSON schema",
+      "Separate serializable behavior from functions",
+      "Add validation with useful paths"
+    ],
+    "acceptance": [
+      "Schema rejects unknown operations and invalid delays",
+      "Versioning rules are documented",
+      "No heavy validator is required at runtime"
+    ],
+    "files": ["schema/scenario.schema.json", "src/scenarios.ts", "docs/SCENARIOS.md"],
+    "tests": ["Valid presets and representative invalid documents"]
+  },
+  {
+    "title": "Create a test vector corpus for wallet implementers",
+    "group": "Ecosystem adoption",
+    "difficulty": "advanced",
+    "type": "compatibility",
+    "context": "Wallet and dApp teams need shared, non-secret request and response fixtures.",
+    "tasks": [
+      "Design versioned fixture metadata",
+      "Add transaction and Soroban examples",
+      "Document expected object results"
+    ],
+    "acceptance": [
+      "All addresses derive from public bytes only",
+      "Fixtures have provenance and protocol versions",
+      "Corpus is consumable outside Vitest"
+    ],
+    "files": ["test-vectors", "docs/INTEROPERABILITY.md"],
+    "tests": ["Every fixture decodes and validates against its metadata"]
+  },
+  {
+    "title": "Add opt-in deterministic cryptographic test signer",
+    "group": "Ecosystem adoption",
+    "difficulty": "advanced",
+    "type": "security",
+    "context": "Some integration tests need valid signatures while the safe default must remain explicitly fake.",
+    "tasks": [
+      "Design an isolated signer entry point",
+      "Use a published throwaway test vector",
+      "Label and document every security boundary"
+    ],
+    "acceptance": [
+      "Core and default adapter never import the signer",
+      "The key is unmistakably public test material",
+      "Transaction, auth, and message verification tests pass"
+    ],
+    "files": ["src/test-signer.ts", "docs/SECURITY_MODEL.md", "package.json"],
+    "tests": ["Signature verification, isolation, tree-shaking, and misuse-warning tests"]
+  },
+  {
+    "title": "Create an adoption feedback template",
+    "group": "Ecosystem adoption",
+    "difficulty": "beginner",
+    "type": "community",
+    "context": "The 1.0 criteria require feedback from real Stellar dApps.",
+    "tasks": [
+      "Add a structured adoption issue form",
+      "Ask about wallet versions and test layers",
+      "Avoid collection of private application data"
+    ],
+    "acceptance": [
+      "Template captures actionable compatibility gaps",
+      "Security-sensitive fields include warnings",
+      "Responses map to roadmap decisions"
+    ],
+    "files": [".github/ISSUE_TEMPLATE/adoption.yml", "docs/ROADMAP.md"],
+    "tests": ["Issue-form YAML validation"]
+  }
+]

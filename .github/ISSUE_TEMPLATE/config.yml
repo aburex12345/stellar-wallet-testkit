@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/aburex12345/stellar-wallet-testkit/security/advisories/new
+    about: Report vulnerabilities privately
+  - name: Usage question
+    url: https://github.com/aburex12345/stellar-wallet-testkit/discussions
+    about: Ask for help without opening a bug
