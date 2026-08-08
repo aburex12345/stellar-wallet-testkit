@@ -26,12 +26,13 @@ for (const issue of issues) {
 }
 
 const repoArguments = repository ? ["--repo", repository] : [];
-function gh(args, { capture = false } = {}) {
+function gh(args, { capture = false, withRepo = true } = {}) {
+  const commandRepoArguments = withRepo ? repoArguments : [];
   if (dryRun) {
-    console.log(["gh", ...args, ...repoArguments].map(JSON.stringify).join(" "));
+    console.log(["gh", ...args, ...commandRepoArguments].map(JSON.stringify).join(" "));
     return "";
   }
-  const result = spawnSync("gh", [...args, ...repoArguments], {
+  const result = spawnSync("gh", [...args, ...commandRepoArguments], {
     encoding: "utf8",
     stdio: capture ? ["ignore", "pipe", "inherit"] : "inherit",
   });
@@ -39,7 +40,7 @@ function gh(args, { capture = false } = {}) {
   return result.stdout ?? "";
 }
 
-if (!dryRun) gh(["auth", "status"]);
+if (!dryRun) gh(["auth", "status"], { withRepo: false });
 
 const labels = new Map([
   ["wave", ["5319E7", "Curated contributor-ready work"]],
