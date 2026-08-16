@@ -144,7 +144,7 @@ the network context supplied by the test; it does not claim to infer a network f
 - `installFreighterMock`, `walletFixture`: extension-free browser testing.
 - `scenario`: seven reusable failure and lifecycle presets.
 - `decodeEnvelope` and assertions: source, network context, count, payment, contract invocation.
-- `stellar-wallet-testkit scenarios|decode`: inspect presets or decode transaction XDR.
+- `stellar-wallet-testkit scenarios|decode|--help|--version`: inspect presets, decode transaction XDR, or print CLI help and version.
 
 Freighter does not currently expose a general account/network event subscription in the methods
 emulated here. The testkit does not invent one on `freighterApi`; use `WalletController.subscribe`

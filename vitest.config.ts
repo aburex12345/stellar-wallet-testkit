@@ -13,7 +13,6 @@ export default defineConfig({
         statements: 85,
       },
       include: ["src/**/*.ts"],
-      exclude: ["src/cli.ts"],
     },
   },
 });

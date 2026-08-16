@@ -7,6 +7,7 @@ All notable changes are documented here. The project follows
 
 ### Added
 
+- CLI `--help` / `--version` flags (also `help` and `version` subcommands).
 - Deterministic wallet controller with subscriptions, history, and scripted outcomes.
 - Freighter-compatible object-result mock API.
 - Playwright injection, test-runner-neutral module factory, and scenario presets.
