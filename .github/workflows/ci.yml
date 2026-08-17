@@ -29,4 +29,8 @@ jobs:
       - run: npm run test:coverage
       - run: npm run build
       - run: npm pack --dry-run
+      - name: Smoke CLI
+        run: |
+          node dist/cli.js --version
+          node dist/cli.js scenarios --json
       - run: npm run issues:check
