@@ -8,10 +8,18 @@ All notable changes are documented here. The project follows
 ### Added
 
 - CLI `--help` / `--version` flags (also `help` and `version` subcommands).
+- `stellar-wallet-testkit scenarios --json` and `decode --network futurenet`.
+- `npm run cli` convenience script and Node 20 `.nvmrc`.
 - Deterministic wallet controller with subscriptions, history, and scripted outcomes.
 - Freighter-compatible object-result mock API.
 - Playwright injection, test-runner-neutral module factory, and scenario presets.
 - Stellar SDK-backed transaction XDR assertions and CLI.
+
+### Fixed
+
+- `changeAccount` rejects blank addresses.
+- Scripted `delayMs` values must be non-negative finite numbers.
+- Unknown `scenario()` names throw at runtime instead of returning `undefined`.
 
 ## Release process
 

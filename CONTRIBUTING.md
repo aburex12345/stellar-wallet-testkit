@@ -17,6 +17,7 @@ Use Node 20 or 22 and npm:
 npm ci
 npm run validate
 npm pack --dry-run
+npm run cli -- --help
 ```
 
 Add meaningful tests for success, failure, and state-transition paths. New public APIs require

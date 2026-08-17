@@ -6,6 +6,7 @@
 
 - [ ] `npm run validate`
 - [ ] `npm pack --dry-run`
+- [ ] CLI smoke (`npm run cli -- scenarios --json`) when CLI behavior changes
 - [ ] Tests cover success and failure behavior
 - [ ] Public API or behavior changes are documented
 - [ ] `CHANGELOG.md` is updated when user-visible
