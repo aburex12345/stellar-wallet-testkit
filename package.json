@@ -63,6 +63,7 @@
     "issues:render": "node scripts/render-wave-issues.mjs",
     "issues:check": "node scripts/render-wave-issues.mjs && git diff --exit-code -- docs/WAVE_ISSUES.md",
     "validate": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run build",
+    "cli": "node dist/cli.js",
     "prepack": "npm run build"
   },
   "dependencies": {
