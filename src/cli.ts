@@ -7,8 +7,8 @@ import { SCENARIO_NAMES } from "./scenarios.js";
 import { decodeEnvelope } from "./xdr.js";
 
 const USAGE = `Usage:
-  stellar-wallet-testkit scenarios
-  stellar-wallet-testkit decode <xdr> [--network testnet|public|<passphrase>]
+  stellar-wallet-testkit scenarios [--json]
+  stellar-wallet-testkit decode <xdr> [--network testnet|public|futurenet|<passphrase>]
   stellar-wallet-testkit --help
   stellar-wallet-testkit --version`;
 
@@ -23,10 +23,12 @@ function packageVersion(): string {
   return (JSON.parse(readFileSync(packagePath, "utf8")) as { version: string }).version;
 }
 
-function resolveNetwork(value?: string): string {
+export function resolveNetwork(value?: string): string {
   const network = value ?? "testnet";
-  if (network.toLowerCase() === "testnet") return Networks.TESTNET;
-  if (network.toLowerCase() === "public") return Networks.PUBLIC;
+  const normalized = network.toLowerCase();
+  if (normalized === "testnet") return Networks.TESTNET;
+  if (normalized === "public") return Networks.PUBLIC;
+  if (normalized === "futurenet") return Networks.FUTURENET;
   return network;
 }
 
@@ -42,6 +44,9 @@ export function runCli(argv: readonly string[]): CliResult {
   }
 
   if (command === "scenarios") {
+    if (arguments_.includes("--json")) {
+      return { exitCode: 0, stdout: `${JSON.stringify([...SCENARIO_NAMES])}\n`, stderr: "" };
+    }
     return { exitCode: 0, stdout: `${SCENARIO_NAMES.join("\n")}\n`, stderr: "" };
   }
 

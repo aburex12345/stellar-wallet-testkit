@@ -1,6 +1,7 @@
+import { Networks } from "@stellar/stellar-sdk";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { runCli } from "../src/cli.js";
+import { resolveNetwork, runCli } from "../src/cli.js";
 
 const version = (
   JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as {
@@ -34,6 +35,26 @@ describe("CLI", () => {
     expect(result.exitCode).toBe(0);
     expect(result.stdout).toContain("user-rejection");
     expect(result.stdout).toContain("signing-failure");
+  });
+
+  it("prints scenario presets as JSON", () => {
+    const result = runCli(["scenarios", "--json"]);
+    expect(result.exitCode).toBe(0);
+    expect(JSON.parse(result.stdout)).toEqual([
+      "user-rejection",
+      "wallet-missing",
+      "wrong-network",
+      "timeout",
+      "account-changed",
+      "malformed-signature-response",
+      "signing-failure",
+    ]);
+  });
+
+  it("maps decode --network aliases to passphrases", () => {
+    expect(resolveNetwork("futurenet")).toBe(Networks.FUTURENET);
+    expect(resolveNetwork("TESTNET")).toBe(Networks.TESTNET);
+    expect(resolveNetwork("public")).toBe(Networks.PUBLIC);
   });
 
   it("prints usage on unknown commands and missing decode input", () => {
