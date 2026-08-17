@@ -53,6 +53,10 @@ export function scenario(name: ScenarioName): WalletControllerOptions {
           },
         ],
       };
+    default: {
+      const exhaustive: never = name;
+      throw new RangeError(`Unknown scenario: ${String(exhaustive)}`);
+    }
   }
 }
 

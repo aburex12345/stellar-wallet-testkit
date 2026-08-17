@@ -15,6 +15,10 @@ describe("scenario presets", () => {
     expect(SCENARIO_NAMES).toHaveLength(7);
   });
 
+  it("rejects unknown scenario names at runtime", () => {
+    expect(() => scenario("not-a-scenario" as never)).toThrow(/Unknown scenario/);
+  });
+
   it("models user rejection", async () => {
     const result = await createFreighterMock(
       new WalletController(scenario("user-rejection")),
