@@ -15,6 +15,9 @@ Presets are passed to `new WalletController(scenario(name))` or directly to
 
 Presets return new options each call. Scripted behaviors are FIFO and one-shot.
 
+List the same names from the CLI with `stellar-wallet-testkit scenarios` or
+`stellar-wallet-testkit scenarios --json`.
+
 ## Custom sequences
 
 ```ts
