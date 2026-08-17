@@ -64,6 +64,7 @@ export class WalletController {
   }
 
   changeAccount(address: string): void {
+    if (!address.trim()) throw new RangeError("address is required");
     this.setState({ address });
   }
 
@@ -72,6 +73,12 @@ export class WalletController {
   }
 
   enqueue(behavior: ScriptedBehavior): this {
+    if (
+      behavior.delayMs !== undefined &&
+      (!Number.isFinite(behavior.delayMs) || behavior.delayMs < 0)
+    ) {
+      throw new RangeError("delayMs must be a non-negative finite number");
+    }
     const queue = this.#scripts.get(behavior.operation) ?? [];
     queue.push({ ...behavior });
     this.#scripts.set(behavior.operation, queue);

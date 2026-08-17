@@ -64,6 +64,10 @@ describe("WalletController", () => {
     expect(controller.state.address).toBe(SECONDARY_ADDRESS);
   });
 
+  it("rejects a blank account address", () => {
+    expect(() => new WalletController().changeAccount("  ")).toThrow(RangeError);
+  });
+
   it("changes network name and passphrase together", () => {
     const controller = new WalletController();
     controller.changeNetwork("PUBLIC", Networks.PUBLIC);
@@ -113,6 +117,12 @@ describe("WalletController", () => {
       scripts: [{ operation: "getAddress", statePatch: { address: SECONDARY_ADDRESS } }],
     });
     expect((await createFreighterMock(controller).getAddress()).address).toBe(SECONDARY_ADDRESS);
+  });
+
+  it("rejects negative script delays", () => {
+    expect(
+      () => new WalletController({ scripts: [{ operation: "isConnected", delayMs: -1 }] }),
+    ).toThrow(RangeError);
   });
 
   it("supports delayed operations", async () => {
