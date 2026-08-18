@@ -56,6 +56,12 @@ export function runCli(argv: readonly string[]): CliResult {
       return { exitCode: 1, stdout: "", stderr: `${USAGE}\n` };
     }
     const networkIndex = arguments_.indexOf("--network");
+    if (networkIndex >= 0) {
+      const networkValue = arguments_[networkIndex + 1];
+      if (!networkValue || networkValue.startsWith("-")) {
+        return { exitCode: 1, stdout: "", stderr: `${USAGE}\n` };
+      }
+    }
     const passphrase = resolveNetwork(networkIndex >= 0 ? arguments_[networkIndex + 1] : undefined);
     try {
       const decoded = decodeEnvelope(xdrValue, passphrase);

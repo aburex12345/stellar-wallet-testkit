@@ -63,6 +63,11 @@ describe("CLI", () => {
     expect(runCli(["decode"]).stderr).toContain("Usage:");
   });
 
+  it("requires a value after decode --network", () => {
+    expect(runCli(["decode", "AAAA", "--network"]).exitCode).toBe(1);
+    expect(runCli(["decode", "AAAA", "--network", "--json"]).exitCode).toBe(1);
+  });
+
   it("returns a dedicated exit code for malformed XDR", () => {
     const result = runCli(["decode", "not-xdr"]);
     expect(result.exitCode).toBe(2);
