@@ -77,6 +77,12 @@ describe("WalletController", () => {
     });
   });
 
+  it("rejects a blank network or passphrase", () => {
+    const controller = new WalletController();
+    expect(() => controller.changeNetwork("  ", Networks.PUBLIC)).toThrow(RangeError);
+    expect(() => controller.changeNetwork("PUBLIC", "")).toThrow(RangeError);
+  });
+
   it("notifies subscribers and supports unsubscribe", () => {
     const controller = new WalletController();
     const events: WalletEvent[] = [];
@@ -86,6 +92,20 @@ describe("WalletController", () => {
     controller.allow();
     expect(events).toHaveLength(1);
     expect(events[0]?.type).toBe("stateChanged");
+  });
+
+  it("keeps notifying remaining subscribers after one throws", () => {
+    const controller = new WalletController();
+    const seen: string[] = [];
+    controller.subscribe(() => {
+      seen.push("first");
+      throw new Error("listener failed");
+    });
+    controller.subscribe(() => {
+      seen.push("second");
+    });
+    expect(() => controller.deny()).toThrow("listener failed");
+    expect(seen).toEqual(["first", "second"]);
   });
 
   it("records operations in order", async () => {
@@ -207,6 +227,13 @@ describe("Freighter-compatible adapter", () => {
   it("passes transaction XDR through as an explicitly fake signature", async () => {
     const result = await createFreighterMock().signTransaction("AAAA");
     expect(result).toEqual({ signedTxXdr: "AAAA", signerAddress: DEFAULT_ADDRESS });
+  });
+
+  it("rejects empty signing payloads", async () => {
+    const api = createFreighterMock();
+    expect((await api.signTransaction("  ")).error?.code).toBe("INVALID_INPUT");
+    expect((await api.signAuthEntry("")).error?.code).toBe("INVALID_INPUT");
+    expect((await api.signMessage("   ")).error?.code).toBe("INVALID_INPUT");
   });
 
   it("rejects an account mismatch", async () => {

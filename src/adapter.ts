@@ -128,6 +128,13 @@ export function createFreighterMock(controller = new WalletController()): Freigh
       execute<SignTransactionResult>(
         "signTransaction",
         () => {
+          if (!transactionXdr.trim()) {
+            return {
+              signedTxXdr: "",
+              signerAddress: "",
+              error: { code: "INVALID_INPUT", message: "Transaction XDR must not be empty." },
+            };
+          }
           const error = validateSigningOptions(options);
           return error
             ? { signedTxXdr: "", signerAddress: "", error }
@@ -139,6 +146,13 @@ export function createFreighterMock(controller = new WalletController()): Freigh
       execute<SignAuthEntryResult>(
         "signAuthEntry",
         () => {
+          if (!authEntryXdr.trim()) {
+            return {
+              signedAuthEntry: "",
+              signerAddress: "",
+              error: { code: "INVALID_INPUT", message: "Auth entry XDR must not be empty." },
+            };
+          }
           const error = validateSigningOptions(options);
           return error
             ? { signedAuthEntry: "", signerAddress: "", error }
@@ -150,6 +164,13 @@ export function createFreighterMock(controller = new WalletController()): Freigh
       execute<SignMessageResult>(
         "signMessage",
         () => {
+          if (!message.trim()) {
+            return {
+              signedMessage: "",
+              signerAddress: "",
+              error: { code: "INVALID_INPUT", message: "Message must not be empty." },
+            };
+          }
           const error = validateSigningOptions(options);
           return error
             ? { signedMessage: "", signerAddress: "", error }
