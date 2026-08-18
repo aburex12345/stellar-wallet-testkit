@@ -84,6 +84,14 @@ describe("browser injection", () => {
     expect((await target.freighterApi.getAddress()).address).toBe(DEFAULT_ADDRESS);
   });
 
+  it("rejects negative browser script delays", async () => {
+    await expect(
+      installFreighterMock(new FakePage(), {
+        scripts: [{ operation: "isConnected", delayMs: -1 }],
+      }),
+    ).rejects.toThrow(RangeError);
+  });
+
   it("provides a Playwright-compatible fixture function", async () => {
     browser();
     let fixtureValue = "";

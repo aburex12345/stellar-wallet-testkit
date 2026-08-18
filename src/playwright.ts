@@ -32,6 +32,14 @@ export async function installFreighterMock(
   options: WalletControllerOptions = {},
 ): Promise<void> {
   const { scripts = [], ...patch } = options;
+  for (const behavior of scripts) {
+    if (
+      behavior.delayMs !== undefined &&
+      (!Number.isFinite(behavior.delayMs) || behavior.delayMs < 0)
+    ) {
+      throw new RangeError("delayMs must be a non-negative finite number");
+    }
+  }
   await page.addInitScript(
     (configuration: { state: WalletState; scripts: ScriptedBehavior[] }) => {
       const state = configuration.state;
@@ -148,6 +156,12 @@ export async function installFreighterMock(
         getState: () => ({ ...state }),
         setState: (next) => Object.assign(state, next),
         enqueue: (behavior) => {
+          if (
+            behavior.delayMs !== undefined &&
+            (!Number.isFinite(behavior.delayMs) || behavior.delayMs < 0)
+          ) {
+            throw new RangeError("delayMs must be a non-negative finite number");
+          }
           const queue = queues.get(behavior.operation) ?? [];
           queue.push(behavior);
           queues.set(behavior.operation, queue);
