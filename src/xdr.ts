@@ -27,16 +27,20 @@ export interface PaymentExpectation {
 }
 
 export class InvalidTransactionXdrError extends Error {
-  constructor(message = "Malformed or unsupported Stellar transaction XDR.") {
-    super(message);
+  constructor(
+    message = "Malformed or unsupported Stellar transaction XDR.",
+    options?: ErrorOptions,
+  ) {
+    super(message, options);
     this.name = "InvalidTransactionXdrError";
   }
 }
 
 export function decodeEnvelope(xdrValue: string, networkPassphrase: string): DecodedEnvelope {
-  if (!xdrValue.trim()) throw new InvalidTransactionXdrError("Transaction XDR must not be empty.");
+  const normalized = xdrValue.trim();
+  if (!normalized) throw new InvalidTransactionXdrError("Transaction XDR must not be empty.");
   try {
-    const transaction = TransactionBuilder.fromXDR(xdrValue, networkPassphrase);
+    const transaction = TransactionBuilder.fromXDR(normalized, networkPassphrase);
     const feeBump = transaction instanceof FeeBumpTransaction;
     const innerTransaction = feeBump ? transaction.innerTransaction : transaction;
     return {
@@ -50,6 +54,7 @@ export function decodeEnvelope(xdrValue: string, networkPassphrase: string): Dec
   } catch (cause) {
     throw new InvalidTransactionXdrError(
       cause instanceof Error ? `Invalid transaction XDR: ${cause.message}` : undefined,
+      { cause },
     );
   }
 }
@@ -90,6 +95,9 @@ export function assertPayment(
   expected: PaymentExpectation,
   operationIndex = 0,
 ): Extract<StellarOperation, { type: "payment" }> {
+  if (!Number.isSafeInteger(operationIndex) || operationIndex < 0) {
+    throw new TypeError("Operation index must be a non-negative safe integer.");
+  }
   const operation = decoded.operations[operationIndex];
   if (!operation) throw new Error(`No operation exists at index ${String(operationIndex)}.`);
   if (operation.type !== "payment") {
@@ -125,6 +133,9 @@ export function assertInvokeContract(
   expectedContractId: string,
   operationIndex = 0,
 ): Extract<StellarOperation, { type: "invokeHostFunction" }> {
+  if (!Number.isSafeInteger(operationIndex) || operationIndex < 0) {
+    throw new TypeError("Operation index must be a non-negative safe integer.");
+  }
   const operation = decoded.operations[operationIndex];
   if (!operation) throw new Error(`No operation exists at index ${String(operationIndex)}.`);
   if (operation.type !== "invokeHostFunction") {

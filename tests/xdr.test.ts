@@ -53,6 +53,20 @@ describe("transaction XDR utilities", () => {
     expect(() => decodeEnvelope("", Networks.TESTNET)).toThrow(InvalidTransactionXdrError);
   });
 
+  it("trims envelope input before decoding", () => {
+    expect(decodeEnvelope(`  ${paymentXdr()}  `, Networks.TESTNET).source).toBe(DEFAULT_ADDRESS);
+  });
+
+  it("attaches the parse cause to malformed XDR errors", () => {
+    try {
+      decodeEnvelope("not-xdr", Networks.TESTNET);
+      throw new Error("expected decodeEnvelope to throw");
+    } catch (error) {
+      expect(error).toBeInstanceOf(InvalidTransactionXdrError);
+      expect((error as InvalidTransactionXdrError).cause).toBeInstanceOf(Error);
+    }
+  });
+
   it("rejects malformed base64", () => {
     expect(() => decodeEnvelope("not-xdr", Networks.TESTNET)).toThrow("Invalid transaction XDR");
   });
@@ -116,6 +130,12 @@ describe("transaction XDR utilities", () => {
   it("rejects a missing payment index", () => {
     expect(() => assertPayment(decodeEnvelope(paymentXdr(), Networks.TESTNET), {}, 2)).toThrow(
       "No operation",
+    );
+  });
+
+  it("rejects a negative payment index", () => {
+    expect(() => assertPayment(decodeEnvelope(paymentXdr(), Networks.TESTNET), {}, -1)).toThrow(
+      TypeError,
     );
   });
 
