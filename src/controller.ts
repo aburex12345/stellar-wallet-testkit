@@ -69,6 +69,9 @@ export class WalletController {
   }
 
   changeNetwork(network: string, networkPassphrase: string): void {
+    if (!network.trim() || !networkPassphrase.trim()) {
+      throw new RangeError("network and networkPassphrase are required");
+    }
     this.setState({ network, networkPassphrase });
   }
 
@@ -115,7 +118,16 @@ export class WalletController {
   }
 
   #emit(event: WalletEvent): void {
-    for (const listener of this.#listeners) listener(event);
+    const errors: unknown[] = [];
+    for (const listener of [...this.#listeners]) {
+      try {
+        listener(event);
+      } catch (error) {
+        errors.push(error);
+      }
+    }
+    if (errors.length === 1) throw errors[0];
+    if (errors.length > 1) throw new AggregateError(errors, "Wallet listener failed");
   }
 }
 
