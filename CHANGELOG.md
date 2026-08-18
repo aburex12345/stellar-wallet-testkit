@@ -18,6 +18,13 @@ All notable changes are documented here. The project follows
 ### Fixed
 
 - `changeAccount` rejects blank addresses.
+- `changeNetwork` rejects blank network names or passphrases.
+- Empty transaction, auth-entry, and message signing payloads return `INVALID_INPUT`.
+- `decode --network` requires a following value instead of silently using testnet.
+- Transaction XDR is trimmed and malformed parse errors keep their `cause`.
+- Payment and invoke assertions reject negative operation indexes.
+- A throwing wallet subscriber no longer skips remaining listeners.
+- Browser injection rejects negative `delayMs` scripts.
 - Scripted `delayMs` values must be non-negative finite numbers.
 - Unknown `scenario()` names throw at runtime instead of returning `undefined`.
 
