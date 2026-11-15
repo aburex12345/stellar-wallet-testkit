@@ -1,0 +1,315 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0.0",
+    "corpusVersion": "1.0.0",
+    "stellarProtocolVersion": 22,
+    "stellarSdkVersion": "14.6.1",
+    "xdrEncoding": "stellar-xdr-base64",
+    "freighterObjectResultSpec": "freighter-api-v2-object-result",
+    "secretPolicy": "public-bytes-only"
+  },
+  "suite": "wallet-lifecycle",
+  "description": "Deterministic wallet connection, permission, network inspection, message signing, and structured error object-result fixtures.",
+  "vectors": [
+    {
+      "id": "lifecycle-is-connected-true",
+      "title": "Connected and installed wallet reports isConnected=true",
+      "category": "connection",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Default wallet state with 32 zero public bytes encoded as Ed25519 StrKey."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "isConnected",
+        "args": []
+      },
+      "expectedResult": {
+        "isConnected": true
+      }
+    },
+    {
+      "id": "lifecycle-is-allowed-true",
+      "title": "Authorized wallet reports isAllowed=true",
+      "category": "permission",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Default wallet state with installed=true, connected=true, allowed=true."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "isAllowed",
+        "args": []
+      },
+      "expectedResult": {
+        "isAllowed": true
+      }
+    },
+    {
+      "id": "lifecycle-get-address-authorized",
+      "title": "Authorized getAddress returns active public address",
+      "category": "identity",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Active address derived from Buffer.alloc(32, 0x00) without private key material."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "getAddress",
+        "args": []
+      },
+      "expectedResult": {
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      }
+    },
+    {
+      "id": "lifecycle-get-network-testnet",
+      "title": "Connected getNetwork returns TESTNET and official Stellar Testnet passphrase",
+      "category": "network",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk Networks.TESTNET",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Standard Stellar Testnet passphrase 'Test SDF Network ; September 2015'."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "getNetwork",
+        "args": []
+      },
+      "expectedResult": {
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      }
+    },
+    {
+      "id": "lifecycle-request-access-declined",
+      "title": "Disallowed wallet returns USER_DECLINED error object on requestAccess",
+      "category": "error-permission",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Wallet state with allowed=false; Freighter object-result returns empty address and structured error."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": false,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "requestAccess",
+        "args": []
+      },
+      "expectedResult": {
+        "address": "",
+        "error": {
+          "code": "USER_DECLINED",
+          "message": "The user declined access."
+        }
+      }
+    },
+    {
+      "id": "lifecycle-wallet-not-installed",
+      "title": "Missing extension returns WALLET_NOT_INSTALLED on getAddress",
+      "category": "error-availability",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Wallet state with installed=false, connected=false, allowed=false."
+      },
+      "initialState": {
+        "installed": false,
+        "connected": false,
+        "allowed": false,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "getAddress",
+        "args": []
+      },
+      "expectedResult": {
+        "address": "",
+        "error": {
+          "code": "WALLET_NOT_INSTALLED",
+          "message": "Freighter is not installed."
+        }
+      }
+    },
+    {
+      "id": "lifecycle-wallet-not-connected",
+      "title": "Disconnected extension returns WALLET_NOT_CONNECTED on getNetwork",
+      "category": "error-availability",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Wallet state with installed=true, connected=false."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": false,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "getNetwork",
+        "args": []
+      },
+      "expectedResult": {
+        "network": "",
+        "networkPassphrase": "",
+        "error": {
+          "code": "WALLET_NOT_CONNECTED",
+          "message": "Freighter is not connected."
+        }
+      }
+    },
+    {
+      "id": "lifecycle-sign-message-deterministic",
+      "title": "signMessage produces base64 FAKE_TEST_SIGNATURE marker without private keys",
+      "category": "message-signing",
+      "provenance": {
+        "generator": "UTF-8 base64 encoding of FAKE_TEST_SIGNATURE:<address>:<message>",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Base64 of 'FAKE_TEST_SIGNATURE:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF:Verify dApp session nonce 42'."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signMessage",
+        "args": [
+          "Verify dApp session nonce 42",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedMessage": "RkFLRV9URVNUX1NJR05BVFVSRTpHQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVdIRjpWZXJpZnkgZEFwcCBzZXNzaW9uIG5vbmNlIDQy",
+        "signerAddress": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      },
+      "decodedExpectations": {
+        "decodedUtf8Payload": "FAKE_TEST_SIGNATURE:GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF:Verify dApp session nonce 42",
+        "nonCryptographicTestMarker": true
+      }
+    },
+    {
+      "id": "lifecycle-sign-message-account-mismatch",
+      "title": "signMessage rejects mismatched signer option with ACCOUNT_MISMATCH",
+      "category": "error-signing-guard",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01"],
+        "deterministicConstruction": "Active wallet is 0x00 account while caller requests signing as 0x01 account."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signMessage",
+        "args": [
+          "Verify dApp session nonce 42",
+          {
+            "address": "GAAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQDZ7H",
+            "networkPassphrase": "Test SDF Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedMessage": "",
+        "signerAddress": "",
+        "error": {
+          "code": "ACCOUNT_MISMATCH",
+          "message": "The requested account is not active."
+        }
+      }
+    },
+    {
+      "id": "lifecycle-sign-message-empty-input",
+      "title": "signMessage rejects whitespace-only message with INVALID_INPUT",
+      "category": "error-validation",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk StrKey public-byte encoding",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Whitespace message '   ' fails non-empty input validation."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signMessage",
+        "args": ["   "]
+      },
+      "expectedResult": {
+        "signedMessage": "",
+        "signerAddress": "",
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Message must not be empty."
+        }
+      }
+    }
+  ]
+}

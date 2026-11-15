@@ -1,0 +1,92 @@
+{
+  "corpusVersion": "1.0.0",
+  "schemaVersion": "1.0.0",
+  "schemaPath": "./schema.json",
+  "stellarProtocolVersion": 22,
+  "stellarSdkVersion": "14.6.1",
+  "xdrEncoding": "stellar-xdr-base64",
+  "freighterObjectResultSpec": "freighter-api-v2-object-result",
+  "secretPolicy": {
+    "mode": "public-bytes-only",
+    "containsPrivateKeys": false,
+    "containsSeedPhrases": false,
+    "containsLiveCapturedTransactions": false,
+    "verificationRule": "Every G... account and C... contract address in this corpus MUST decode via Stellar StrKey to the exact 32-byte constant fill listed in identities[].publicBytesHex."
+  },
+  "identities": [
+    {
+      "id": "account-zero-default",
+      "label": "Default active wallet account",
+      "kind": "ed25519PublicKey",
+      "fillByteHex": "0x00",
+      "publicBytesHex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "strKey": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+      "derivation": "StrKey.encodeEd25519PublicKey(Buffer.alloc(32, 0x00))"
+    },
+    {
+      "id": "account-recipient-01",
+      "label": "Deterministic payment recipient",
+      "kind": "ed25519PublicKey",
+      "fillByteHex": "0x01",
+      "publicBytesHex": "0101010101010101010101010101010101010101010101010101010101010101",
+      "strKey": "GAAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQDZ7H",
+      "derivation": "StrKey.encodeEd25519PublicKey(Buffer.alloc(32, 0x01))"
+    },
+    {
+      "id": "account-issuer-02",
+      "label": "Deterministic credit asset issuer",
+      "kind": "ed25519PublicKey",
+      "fillByteHex": "0x02",
+      "publicBytesHex": "0202020202020202020202020202020202020202020202020202020202020202",
+      "strKey": "GABAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEJXA",
+      "derivation": "StrKey.encodeEd25519PublicKey(Buffer.alloc(32, 0x02))"
+    },
+    {
+      "id": "account-sponsor-03",
+      "label": "Deterministic fee-bump sponsor & delegate",
+      "kind": "ed25519PublicKey",
+      "fillByteHex": "0x03",
+      "publicBytesHex": "0303030303030303030303030303030303030303030303030303030303030303",
+      "strKey": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC",
+      "derivation": "StrKey.encodeEd25519PublicKey(Buffer.alloc(32, 0x03))"
+    },
+    {
+      "id": "contract-token-11",
+      "label": "Deterministic Soroban token contract",
+      "kind": "contract",
+      "fillByteHex": "0x11",
+      "publicBytesHex": "1111111111111111111111111111111111111111111111111111111111111111",
+      "strKey": "CAIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRDB3V",
+      "derivation": "StrKey.encodeContract(Buffer.alloc(32, 0x11))"
+    },
+    {
+      "id": "contract-router-22",
+      "label": "Deterministic Soroban router sub-contract",
+      "kind": "contract",
+      "fillByteHex": "0x22",
+      "publicBytesHex": "2222222222222222222222222222222222222222222222222222222222222222",
+      "strKey": "CARCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEVQO",
+      "derivation": "StrKey.encodeContract(Buffer.alloc(32, 0x22))"
+    }
+  ],
+  "suites": [
+    {
+      "suite": "wallet-lifecycle",
+      "path": "./wallet-lifecycle.json",
+      "vectorCount": 10,
+      "summary": "Deterministic wallet connection, permission, network inspection, message signing, and structured error object-result fixtures."
+    },
+    {
+      "suite": "transactions",
+      "path": "./transactions.json",
+      "vectorCount": 6,
+      "summary": "Deterministic classic Stellar TransactionEnvelope and FeeBumpTransaction XDR fixtures with expected Freighter signTransaction object results."
+    },
+    {
+      "suite": "soroban",
+      "path": "./soroban.json",
+      "vectorCount": 6,
+      "summary": "Deterministic Soroban contract invocation transactions, SorobanAuthorizationEntry structures, HashIdPreimageSorobanAuthorization payloads, and signAuthEntry object results."
+    }
+  ]
+}
