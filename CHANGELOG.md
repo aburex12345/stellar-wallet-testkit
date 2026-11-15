@@ -7,6 +7,7 @@ All notable changes are documented here. The project follows
 
 ### Added
 
+- Soroban authorization-entry XDR decoders (`decodeAuthEntry`, `decodeAuthEntryPreimage`, `decodeSorobanAuth`) and `assertAuthContractInvocation` with normalized `InvalidAuthEntryXdrError` handling and documented CAP-0071 version boundary.
 - CLI `--help` / `--version` flags (also `help` and `version` subcommands).
 - `stellar-wallet-testkit scenarios --json` and `decode --network futurenet`.
 - `npm run cli` convenience script and Node 20 `.nvmrc`.

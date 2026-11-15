@@ -144,6 +144,10 @@ the network context supplied by the test; it does not claim to infer a network f
 - `installFreighterMock`, `walletFixture`: extension-free browser testing.
 - `scenario`: seven reusable failure and lifecycle presets.
 - `decodeEnvelope` and assertions: source, network context, count, payment, contract invocation.
+- `decodeAuthEntry`, `decodeAuthEntryPreimage`, `decodeSorobanAuth`, and
+  `assertAuthContractInvocation`: inspect Soroban authorization credentials (`sourceAccount`,
+  `address`), preimages passed to `signAuthEntry`, and nested invocation trees without signing
+  (CAP-0071 `ADDRESS_V2` entries are version-gated with an explicit error on `@stellar/stellar-sdk` v14).
 - `stellar-wallet-testkit scenarios [--json]|decode|--help|--version`: inspect presets, decode transaction XDR, or print CLI help and version.
 
 Freighter does not currently expose a general account/network event subscription in the methods
