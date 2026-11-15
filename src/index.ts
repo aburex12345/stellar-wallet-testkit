@@ -3,6 +3,27 @@ export { normalizeError, WalletController, WalletOperationError } from "./contro
 export { createFreighterModuleMock } from "./mock.js";
 export { SCENARIO_NAMES, SECONDARY_ADDRESS, scenario } from "./scenarios.js";
 export {
+  assertAuthContractInvocation,
+  decodeAuthEntry,
+  decodeAuthEntryPreimage,
+  decodeSorobanAuth,
+  InvalidAuthEntryXdrError,
+} from "./auth-xdr.js";
+export type {
+  AddressCredentials,
+  AuthInvocationExpectation,
+  ContractFunctionInvocation,
+  CreateContractFunctionInvocation,
+  CreateContractV2FunctionInvocation,
+  DecodedAuthCredentials,
+  DecodedAuthEntry,
+  DecodedAuthEntryPreimage,
+  DecodedAuthorizedFunction,
+  DecodedAuthorizedInvocation,
+  DecodedSorobanAuthPayload,
+  SourceAccountCredentials,
+} from "./auth-xdr.js";
+export {
   assertInvokeContract,
   assertOperationCount,
   assertPayment,
