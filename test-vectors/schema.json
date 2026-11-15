@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/aburex12345/stellar-wallet-testkit/blob/main/test-vectors/schema.json",
+  "title": "Stellar Wallet Testkit Interoperability Corpus Suite",
+  "description": "Language-agnostic JSON schema for non-secret Freighter-compatible wallet request, response, transaction XDR, and Soroban authorization fixtures.",
+  "type": "object",
+  "required": ["metadata", "suite", "description", "vectors"],
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "corpusVersion",
+        "stellarProtocolVersion",
+        "stellarSdkVersion",
+        "xdrEncoding",
+        "freighterObjectResultSpec",
+        "secretPolicy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "type": "string"
+        },
+        "corpusVersion": {
+          "type": "string"
+        },
+        "stellarProtocolVersion": {
+          "type": "integer",
+          "minimum": 20
+        },
+        "stellarSdkVersion": {
+          "type": "string"
+        },
+        "xdrEncoding": {
+          "const": "stellar-xdr-base64"
+        },
+        "freighterObjectResultSpec": {
+          "const": "freighter-api-v2-object-result"
+        },
+        "secretPolicy": {
+          "const": "public-bytes-only"
+        }
+      }
+    },
+    "suite": {
+      "type": "string",
+      "enum": ["wallet-lifecycle", "transactions", "soroban"]
+    },
+    "description": {
+      "type": "string"
+    },
+    "vectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "category",
+          "provenance",
+          "initialState",
+          "request",
+          "expectedResult"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "provenance": {
+            "type": "object",
+            "required": [
+              "generator",
+              "containsSecretMaterial",
+              "identitiesUsed",
+              "deterministicConstruction"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "generator": {
+                "type": "string"
+              },
+              "containsSecretMaterial": {
+                "const": false
+              },
+              "identitiesUsed": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "deterministicConstruction": {
+                "type": "string"
+              },
+              "protocolNotes": {
+                "type": "string"
+              }
+            }
+          },
+          "initialState": {
+            "type": "object",
+            "required": [
+              "installed",
+              "connected",
+              "allowed",
+              "address",
+              "network",
+              "networkPassphrase"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "installed": {
+                "type": "boolean"
+              },
+              "connected": {
+                "type": "boolean"
+              },
+              "allowed": {
+                "type": "boolean"
+              },
+              "address": {
+                "type": "string"
+              },
+              "network": {
+                "type": "string"
+              },
+              "networkPassphrase": {
+                "type": "string"
+              }
+            }
+          },
+          "request": {
+            "type": "object",
+            "required": ["operation", "args"],
+            "additionalProperties": false,
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": [
+                  "isConnected",
+                  "isAllowed",
+                  "getAddress",
+                  "requestAccess",
+                  "getNetwork",
+                  "signMessage",
+                  "signTransaction",
+                  "signAuthEntry"
+                ]
+              },
+              "args": {
+                "type": "array"
+              }
+            }
+          },
+          "expectedResult": {
+            "type": "object"
+          },
+          "decodedExpectations": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

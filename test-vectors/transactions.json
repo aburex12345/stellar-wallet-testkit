@@ -1,0 +1,303 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0.0",
+    "corpusVersion": "1.0.0",
+    "stellarProtocolVersion": 22,
+    "stellarSdkVersion": "14.6.1",
+    "xdrEncoding": "stellar-xdr-base64",
+    "freighterObjectResultSpec": "freighter-api-v2-object-result",
+    "secretPolicy": "public-bytes-only"
+  },
+  "suite": "transactions",
+  "description": "Deterministic classic Stellar TransactionEnvelope and FeeBumpTransaction XDR fixtures with expected Freighter signTransaction object results.",
+  "vectors": [
+    {
+      "id": "tx-payment-native-xlm",
+      "title": "Classic v1 native XLM payment transaction on Testnet",
+      "category": "payment-native",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 TransactionBuilder",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01"],
+        "deterministicConstruction": "Sequence 100, fee 100 stroops, timebounds [0, 1767225600], 25.5000000 XLM payment from 0x00 to 0x01, zero signatures.",
+        "protocolNotes": "Stellar Protocol 22 ENVELOPE_TYPE_TX (v1) unsigned transaction envelope."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAAAAAAAZQAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAADzL9wAAAAAAAAAAA",
+          {
+            "network": "TESTNET",
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAAAAAAAZQAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAADzL9wAAAAAAAAAAA",
+        "signerAddress": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      },
+      "decodedExpectations": {
+        "envelopeType": "ENVELOPE_TYPE_TX",
+        "feeBump": false,
+        "source": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "sequence": "101",
+        "fee": "100",
+        "memoType": "none",
+        "operationCount": 1,
+        "operations": [
+          {
+            "index": 0,
+            "type": "payment",
+            "destination": "GAAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQDZ7H",
+            "asset": "native",
+            "amount": "25.5000000"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tx-payment-credit-usdc-memo",
+      "title": "Issued credit asset (USDC) payment with text memo on Testnet",
+      "category": "payment-credit-asset",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 TransactionBuilder",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01", "account-issuer-02"],
+        "deterministicConstruction": "Sequence 101, fee 200 stroops, timebounds [0, 1767225600], Memo.text('invoice-2026-001'), 150.0000000 USDC issued by 0x02.",
+        "protocolNotes": "Stellar Protocol 22 credit_alphanum4 payment envelope."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMgAAAAAAAAAZgAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAQAAABBpbnZvaWNlLTIwMjYtMDAxAAAAAQAAAAAAAAABAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAAAAAVVTREMAAAAAAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAAAAAWWgvAAAAAAAAAAAA",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMgAAAAAAAAAZgAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAQAAABBpbnZvaWNlLTIwMjYtMDAxAAAAAQAAAAAAAAABAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAAAAAVVTREMAAAAAAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAAAAAWWgvAAAAAAAAAAAA",
+        "signerAddress": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      },
+      "decodedExpectations": {
+        "envelopeType": "ENVELOPE_TYPE_TX",
+        "feeBump": false,
+        "source": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "sequence": "102",
+        "fee": "200",
+        "memoType": "text",
+        "memoValue": "invoice-2026-001",
+        "operationCount": 1,
+        "operations": [
+          {
+            "index": 0,
+            "type": "payment",
+            "destination": "GAAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQDZ7H",
+            "assetCode": "USDC",
+            "assetIssuer": "GABAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEJXA",
+            "amount": "150.0000000"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tx-multi-operation-payment-managedata",
+      "title": "Multi-operation transaction combining native payment and manageData",
+      "category": "multi-operation",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 TransactionBuilder",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01"],
+        "deterministicConstruction": "Sequence 102, base fee 150 * 2 = 300 stroops, timebounds [0, 1767225600], payment(10 XLM) + manageData('testkit.vector'='v1')."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlgAAAAAAAAAZwAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAIAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAABfXhAAAAAAAAAAAKAAAADnRlc3RraXQudmVjdG9yAAAAAAABAAAAAnYxAAAAAAAAAAAAAA==",
+          {
+            "network": "TESTNET",
+            "networkPassphrase": "Test SDF Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlgAAAAAAAAAZwAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAIAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAABfXhAAAAAAAAAAAKAAAADnRlc3RraXQudmVjdG9yAAAAAAABAAAAAnYxAAAAAAAAAAAAAA==",
+        "signerAddress": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      },
+      "decodedExpectations": {
+        "envelopeType": "ENVELOPE_TYPE_TX",
+        "feeBump": false,
+        "source": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "sequence": "103",
+        "fee": "300",
+        "memoType": "none",
+        "operationCount": 2,
+        "operations": [
+          {
+            "index": 0,
+            "type": "payment",
+            "destination": "GAAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQDZ7H",
+            "asset": "native",
+            "amount": "10.0000000"
+          },
+          {
+            "index": 1,
+            "type": "manageData",
+            "name": "testkit.vector",
+            "valueUtf8": "v1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tx-fee-bump-sponsored-payment",
+      "title": "Unsigned FeeBumpTransaction wrapping inner native payment",
+      "category": "fee-bump",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 xdr.FeeBumpTransactionEnvelope",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01", "account-sponsor-03"],
+        "deterministicConstruction": "Outer feeSource=0x03 (fee 1000 stroops, 0 signatures) wrapping inner v1 tx from 0x00 (seq 103->104, 5.0000000 XLM to 0x01).",
+        "protocolNotes": "CAP-0015 / Protocol 22 ENVELOPE_TYPE_TX_FEE_BUMP constructed purely from public XDR structs."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "AAAABQAAAAADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwAAAAAAAAPoAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAAAAAAAaAAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAAAvrwgAAAAAAAAAAAAAAAAAAAAAA=",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "AAAABQAAAAADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwAAAAAAAAPoAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAAAAAAAaAAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAAAvrwgAAAAAAAAAAAAAAAAAAAAAA=",
+        "signerAddress": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+      },
+      "decodedExpectations": {
+        "envelopeType": "ENVELOPE_TYPE_TX_FEE_BUMP",
+        "feeBump": true,
+        "feeSource": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC",
+        "outerFee": "1000",
+        "source": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "innerSequence": "104",
+        "operationCount": 1,
+        "operations": [
+          {
+            "index": 0,
+            "type": "payment",
+            "destination": "GAAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQCAIBAEAQDZ7H",
+            "asset": "native",
+            "amount": "5.0000000"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tx-sign-network-mismatch",
+      "title": "signTransaction rejects Public Global Stellar Network request when wallet is on TESTNET",
+      "category": "error-network-guard",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 TransactionBuilder",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01"],
+        "deterministicConstruction": "Valid Testnet payment XDR submitted with Public network passphrase triggers NETWORK_MISMATCH."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAAAAAAAZQAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAAQAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAAAAAAADzL9wAAAAAAAAAAA",
+          {
+            "network": "PUBLIC",
+            "networkPassphrase": "Public Global Stellar Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "",
+        "signerAddress": "",
+        "error": {
+          "code": "NETWORK_MISMATCH",
+          "message": "The requested network does not match."
+        }
+      }
+    },
+    {
+      "id": "tx-sign-empty-xdr",
+      "title": "signTransaction rejects empty XDR string with INVALID_INPUT",
+      "category": "error-validation",
+      "provenance": {
+        "generator": "Static empty string input validation vector",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Empty XDR string '' rejected before controller state checks."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "",
+        "signerAddress": "",
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Transaction XDR must not be empty."
+        }
+      }
+    }
+  ]
+}

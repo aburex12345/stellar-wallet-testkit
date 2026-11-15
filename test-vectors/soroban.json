@@ -1,0 +1,297 @@
+{
+  "metadata": {
+    "schemaVersion": "1.0.0",
+    "corpusVersion": "1.0.0",
+    "stellarProtocolVersion": 22,
+    "stellarSdkVersion": "14.6.1",
+    "xdrEncoding": "stellar-xdr-base64",
+    "freighterObjectResultSpec": "freighter-api-v2-object-result",
+    "secretPolicy": "public-bytes-only"
+  },
+  "suite": "soroban",
+  "description": "Deterministic Soroban contract invocation transactions, SorobanAuthorizationEntry structures, HashIdPreimageSorobanAuthorization payloads, and signAuthEntry object results.",
+  "vectors": [
+    {
+      "id": "soroban-tx-invoke-token-transfer",
+      "title": "Soroban invokeHostFunction contract transfer transaction with dual auth entries",
+      "category": "soroban-transaction",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 Operation.invokeHostFunction",
+        "containsSecretMaterial": false,
+        "identitiesUsed": [
+          "account-zero-default",
+          "account-recipient-01",
+          "account-sponsor-03",
+          "contract-token-11",
+          "contract-router-22"
+        ],
+        "deterministicConstruction": "InvokeContract on 0x11 token contract fn 'transfer'(from=0x00, to=0x01, amount=50000000 i128) with sourceAccount + address auth entries.",
+        "protocolNotes": "Stellar Protocol 22 Soroban InvokeHostFunctionOp inside ENVELOPE_TYPE_TX."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signTransaction",
+        "args": [
+          "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJxAAAAAAAAAAyQAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREAAAAIdHJhbnNmZXIAAAADAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAgAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERAAAACHRyYW5zZmVyAAAAAwAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAAAAAABAAAAAAAAAAADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwAAAAAADbuhAAhk6wAAABAAAAABAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREAAAAIdHJhbnNmZXIAAAADAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAQAAAAAAAAABIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAALcmVjb3JkX2hvb2sAAAAAAgAAABIAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAAAACgAAAAAAAAAAAAAAAAL68IAAAAAAAAAAAAAAAAA=",
+          {
+            "network": "TESTNET",
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedTxXdr": "AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJxAAAAAAAAAAyQAAAAEAAAAAAAAAAAAAAABpVbkAAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREAAAAIdHJhbnNmZXIAAAADAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAgAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERAAAACHRyYW5zZmVyAAAAAwAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAAAAAABAAAAAAAAAAADAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwAAAAAADbuhAAhk6wAAABAAAAABAAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREAAAAIdHJhbnNmZXIAAAADAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAQAAAAAAAAABIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIAAAALcmVjb3JkX2hvb2sAAAAAAgAAABIAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAAAACgAAAAAAAAAAAAAAAAL68IAAAAAAAAAAAAAAAAA=",
+        "signerAddress": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      },
+      "decodedExpectations": {
+        "envelopeType": "ENVELOPE_TYPE_TX",
+        "feeBump": false,
+        "source": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "sequence": "201",
+        "fee": "10000",
+        "operationCount": 1,
+        "contractInvocation": {
+          "operationIndex": 0,
+          "contractId": "CAIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRDB3V",
+          "functionName": "transfer",
+          "argCount": 3,
+          "authEntryCount": 2
+        }
+      }
+    },
+    {
+      "id": "soroban-auth-entry-source-account",
+      "title": "SorobanAuthorizationEntry with sorobanCredentialsSourceAccount",
+      "category": "soroban-auth-entry",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 xdr.SorobanAuthorizationEntry",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-recipient-01", "contract-token-11"],
+        "deterministicConstruction": "SorobanAuthorizationEntry using sorobanCredentialsSourceAccount authorizing token.transfer(0x00, 0x01, 50000000 i128).",
+        "protocolNotes": "Stellar Protocol 22 SOROBAN_CREDENTIALS_SOURCE_ACCOUNT (discriminant 0)."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signAuthEntry",
+        "args": [
+          "AAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREAAAAIdHJhbnNmZXIAAAADAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAA==",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedAuthEntry": "AAAAAAAAAAAAAAABEREREREREREREREREREREREREREREREREREREREREREAAAAIdHJhbnNmZXIAAAADAAAAEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAA==",
+        "signerAddress": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF"
+      },
+      "decodedExpectations": {
+        "xdrType": "SorobanAuthorizationEntry",
+        "credentialsType": "sorobanCredentialsSourceAccount",
+        "rootInvocation": {
+          "contractId": "CAIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRDB3V",
+          "functionName": "transfer",
+          "argCount": 3,
+          "subInvocationCount": 0
+        }
+      }
+    },
+    {
+      "id": "soroban-auth-entry-address-credentials",
+      "title": "SorobanAuthorizationEntry with sorobanCredentialsAddress, expiration ledger, and sub-invocation",
+      "category": "soroban-auth-entry",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 xdr.SorobanAuthorizationEntry",
+        "containsSecretMaterial": false,
+        "identitiesUsed": [
+          "account-zero-default",
+          "account-recipient-01",
+          "account-sponsor-03",
+          "contract-token-11",
+          "contract-router-22"
+        ],
+        "deterministicConstruction": "SorobanAddressCredentials for 0x03 (nonce=900001, signatureExpirationLedger=550123, empty scvVec signature) with nested sub-invocation on 0x22 router contract.",
+        "protocolNotes": "Stellar Protocol 22 SOROBAN_CREDENTIALS_ADDRESS (discriminant 1); forward-compatible metadata documents Protocol 22 baseline prior to CAP-0071 v2 delegation."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signAuthEntry",
+        "args": [
+          "AAAAAQAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMAAAAAAA27oQAIZOsAAAAQAAAAAQAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERAAAACHRyYW5zZmVyAAAAAwAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAEAAAAAAAAAASIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAC3JlY29yZF9ob29rAAAAAAIAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAA==",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedAuthEntry": "AAAAAQAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMAAAAAAA27oQAIZOsAAAAQAAAAAQAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERAAAACHRyYW5zZmVyAAAAAwAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAEAAAAAAAAAASIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAC3JlY29yZF9ob29rAAAAAAIAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAA==",
+        "signerAddress": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+      },
+      "decodedExpectations": {
+        "xdrType": "SorobanAuthorizationEntry",
+        "credentialsType": "sorobanCredentialsAddress",
+        "signerAddress": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC",
+        "nonce": "900001",
+        "signatureExpirationLedger": 550123,
+        "rootInvocation": {
+          "contractId": "CAIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRDB3V",
+          "functionName": "transfer",
+          "argCount": 3,
+          "subInvocationCount": 1,
+          "subInvocations": [
+            {
+              "contractId": "CARCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEVQO",
+              "functionName": "record_hook",
+              "argCount": 2
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "soroban-auth-preimage-sign",
+      "title": "HashIdPreimageSorobanAuthorization payload passed to signAuthEntry",
+      "category": "soroban-auth-preimage",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 xdr.HashIdPreimage.envelopeTypeSorobanAuthorization",
+        "containsSecretMaterial": false,
+        "identitiesUsed": [
+          "account-zero-default",
+          "account-recipient-01",
+          "account-sponsor-03",
+          "contract-token-11",
+          "contract-router-22"
+        ],
+        "deterministicConstruction": "ENVELOPE_TYPE_SOROBAN_AUTHORIZATION with 32-byte constant networkId (0xaa), nonce=900001, signatureExpirationLedger=550123, and transfer+record_hook invocation tree.",
+        "protocolNotes": "Matches SEP-0043 / Freighter signAuthEntry preimage XDR workflow where wallets hash and sign the authorization preimage."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signAuthEntry",
+        "args": [
+          "AAAACaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqAAAAAAANu6EACGTrAAAAAAAAAAEREREREREREREREREREREREREREREREREREREREREREQAAAAh0cmFuc2ZlcgAAAAMAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAAAACgAAAAAAAAAAAAAAAAL68IAAAAABAAAAAAAAAAEiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAAAtyZWNvcmRfaG9vawAAAAACAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAA=",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedAuthEntry": "AAAACaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqAAAAAAANu6EACGTrAAAAAAAAAAEREREREREREREREREREREREREREREREREREREREREREQAAAAh0cmFuc2ZlcgAAAAMAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAAAACgAAAAAAAAAAAAAAAAL68IAAAAABAAAAAAAAAAEiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIgAAAAtyZWNvcmRfaG9vawAAAAACAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAA=",
+        "signerAddress": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+      },
+      "decodedExpectations": {
+        "xdrType": "HashIdPreimage",
+        "envelopeType": "envelopeTypeSorobanAuthorization",
+        "networkIdHex": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "nonce": "900001",
+        "signatureExpirationLedger": 550123,
+        "rootContractId": "CAIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRCEIRDB3V",
+        "rootFunctionName": "transfer"
+      }
+    },
+    {
+      "id": "soroban-sign-auth-account-mismatch",
+      "title": "signAuthEntry rejects mismatched requested signer address with ACCOUNT_MISMATCH",
+      "category": "error-signing-guard",
+      "provenance": {
+        "generator": "@stellar/stellar-sdk@14.6.1 xdr.SorobanAuthorizationEntry",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default", "account-sponsor-03", "contract-token-11"],
+        "deterministicConstruction": "Active wallet is 0x00 while signAuthEntry options request 0x03 address."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signAuthEntry",
+        "args": [
+          "AAAAAQAAAAAAAAAAAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMAAAAAAA27oQAIZOsAAAAQAAAAAQAAAAAAAAAAAAAAARERERERERERERERERERERERERERERERERERERERERERAAAACHRyYW5zZmVyAAAAAwAAABIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEAAAAKAAAAAAAAAAAAAAAAAvrwgAAAAAEAAAAAAAAAASIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiAAAAC3JlY29yZF9ob29rAAAAAAIAAAASAAAAAAAAAAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQAAAAoAAAAAAAAAAAAAAAAC+vCAAAAAAA==",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015",
+            "address": "GABQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQGAYDAMBQHGPC"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedAuthEntry": "",
+        "signerAddress": "",
+        "error": {
+          "code": "ACCOUNT_MISMATCH",
+          "message": "The requested account is not active."
+        }
+      }
+    },
+    {
+      "id": "soroban-sign-auth-empty-input",
+      "title": "signAuthEntry rejects whitespace-only auth entry XDR with INVALID_INPUT",
+      "category": "error-validation",
+      "provenance": {
+        "generator": "Static whitespace XDR input validation vector",
+        "containsSecretMaterial": false,
+        "identitiesUsed": ["account-zero-default"],
+        "deterministicConstruction": "Whitespace authEntryXdr '   ' rejected with INVALID_INPUT."
+      },
+      "initialState": {
+        "installed": true,
+        "connected": true,
+        "allowed": true,
+        "address": "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF",
+        "network": "TESTNET",
+        "networkPassphrase": "Test SDF Network ; September 2015"
+      },
+      "request": {
+        "operation": "signAuthEntry",
+        "args": [
+          "   ",
+          {
+            "networkPassphrase": "Test SDF Network ; September 2015"
+          }
+        ]
+      },
+      "expectedResult": {
+        "signedAuthEntry": "",
+        "signerAddress": "",
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Auth entry XDR must not be empty."
+        }
+      }
+    }
+  ]
+}
